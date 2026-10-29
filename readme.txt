@@ -1,6 +1,6 @@
 === Threshold Easy Downloader ===
 Contributors: pugboy
-Tags: download, plugin, theme, zip, backup
+Tags: download, zip, backup, export, developer
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4

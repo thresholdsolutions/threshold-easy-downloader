@@ -40,7 +40,7 @@ class TED_Zipper {
      */
     public static function handle_download() {
         $type = isset( $_GET['type'] ) ? sanitize_key( $_GET['type'] ) : '';
-        $item = isset( $_GET['item'] ) ? wp_unslash( $_GET['item'] ) : '';
+        $item = isset( $_GET['item'] ) ? sanitize_text_field( wp_unslash( $_GET['item'] ) ) : '';
 
         if ( ! in_array( $type, array( 'plugin', 'theme' ), true ) || '' === $item ) {
             wp_die( esc_html__( 'Invalid download request.', 'threshold-easy-downloader' ) );
@@ -153,7 +153,7 @@ class TED_Zipper {
         register_shutdown_function(
             static function () use ( $tmp ) {
                 if ( file_exists( $tmp ) ) {
-                    @unlink( $tmp ); // phpcs:ignore WordPress.PHP.NoSilencedErrors
+                    wp_delete_file( $tmp );
                 }
             }
         );
@@ -163,7 +163,7 @@ class TED_Zipper {
             : self::build_with_pclzip( $source, $root, $tmp );
 
         if ( ! $ok || ! filesize( $tmp ) ) {
-            @unlink( $tmp );
+            wp_delete_file( $tmp );
             wp_die( esc_html__( 'Failed to build the ZIP archive.', 'threshold-easy-downloader' ) );
         }
 
@@ -181,16 +181,20 @@ class TED_Zipper {
         header( 'Content-Length: ' . filesize( $tmp ) );
         header( 'X-Content-Type-Options: nosniff' );
 
-        // Stream in chunks to keep memory flat on big themes.
-        $fh = fopen( $tmp, 'rb' );
+        // Stream in 1 MB chunks to keep memory flat on big themes. Direct PHP
+        // file functions are used on purpose here: WP_Filesystem has no way to
+        // read a file in pieces, and get_contents() would load a ZIP that can
+        // run to tens of megabytes into memory just to echo it. The file is a
+        // temp ZIP this plugin created a moment ago, never user-supplied.
+        $fh = fopen( $tmp, 'rb' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
         if ( $fh ) {
             while ( ! feof( $fh ) ) {
-                echo fread( $fh, 1048576 ); // phpcs:ignore WordPress.Security.EscapeOutput
+                echo fread( $fh, 1048576 ); // phpcs:ignore WordPress.Security.EscapeOutput, WordPress.WP.AlternativeFunctions.file_system_operations_fread
                 flush();
             }
-            fclose( $fh );
+            fclose( $fh ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
         }
-        @unlink( $tmp );
+        wp_delete_file( $tmp );
         exit;
     }
 
@@ -263,7 +267,7 @@ class TED_Zipper {
         }
 
         // PclZip refuses to write over the 0-byte tempnam file.
-        @unlink( $dest );
+        wp_delete_file( $dest );
 
         $zip = new PclZip( $dest );
 
