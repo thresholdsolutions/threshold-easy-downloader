@@ -1,5 +1,5 @@
 === Threshold Easy Plugin and Theme Downloader ===
-Contributors: spencertaylor
+Contributors: pugboy
 Tags: download, plugin, theme, zip, backup
 Requires at least: 6.0
 Tested up to: 7.1
