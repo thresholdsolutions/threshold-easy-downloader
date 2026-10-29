@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Threshold Easy Downloader">
+  <rect width="256" height="256" fill="#222222"/>
+  <g transform="translate(128 128) scale(1.05) translate(-344 -184)">
+    <path d="M292 110 h64 l40 40 v124 a12 12 0 0 1 -12 12 h-92 a12 12 0 0 1 -12 -12 v-152 a12 12 0 0 1 12 -12 z" fill="#ffc966" stroke="#222222" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M356 110 v40 h40" fill="#ffedcc" stroke="#222222" stroke-width="4" stroke-linejoin="round"/>
+    <g fill="#222222"><rect x="306" y="118" width="12" height="10" rx="2"/><rect x="318" y="128" width="12" height="10" rx="2"/><rect x="306" y="138" width="12" height="10" rx="2"/><rect x="318" y="148" width="12" height="10" rx="2"/></g>
+    <rect x="312" y="238" width="64" height="20" rx="10" fill="#222222"/>
+    <g fill="#ffc966"><rect x="322" y="246" width="12" height="4" rx="2"/><rect x="338" y="246" width="12" height="4" rx="2"/><rect x="354" y="246" width="12" height="4" rx="2"/></g>
+    <path d="M344 174 v46" fill="none" stroke="#222222" stroke-width="6" stroke-linecap="round"/>
+    <path d="M328 206 l16 16 l16 -16" fill="none" stroke="#222222" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>
