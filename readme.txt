@@ -1,10 +1,10 @@
-=== Threshold Easy Plugin and Theme Downloader ===
+=== Threshold Easy Downloader ===
 Contributors: pugboy
 Tags: download, plugin, theme, zip, backup
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.1.0
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,7 +12,7 @@ Download any installed plugin or theme as a ZIP file, from the Plugins list or t
 
 == Description ==
 
-Threshold Easy Plugin and Theme Downloader adds one-click "Download ZIP" links for every installed plugin and theme:
+Threshold Easy Downloader adds one-click "Download ZIP" links for every installed plugin and theme:
 
 * A **Download ZIP** row action on the Plugins screen (and the network Themes screen on multisite).
 * A **Tools → Easy Downloader** page listing all plugins and themes with version, status, on-disk size, a live filter, and download buttons.
@@ -20,13 +20,17 @@ Threshold Easy Plugin and Theme Downloader adds one-click "Download ZIP" links f
 * Capability-gated (`install_plugins` / `install_themes`) and nonce-protected; requested items are validated against the real installed plugin and theme lists.
 * Symbolic links inside a plugin or theme folder are left out of the ZIP.
 * Uses ZipArchive with automatic PclZip fallback.
-* Self-hosted updates from the Threshold update server, enrolled in WordPress auto-updates, with a "Check for updates now" button.
+* No settings, no outside services, and nothing sent anywhere: everything happens on your own server.
 
 User guide: https://spencer-taylor.com/threshold-easy-downloader/#guide
 
 Built by Spencer Taylor, Threshold Solutions, LLC.
 
 == Changelog ==
+
+= 1.2.0 =
+* Changed: updates now come from the WordPress.org plugin directory. The self-hosted updater, the auto-update enrolment, and the "Check for updates now" button are removed.
+* Changed: plugin renamed to Threshold Easy Downloader.
 
 = 1.1.0 =
 * Security: symbolic links inside a plugin or theme folder are no longer followed into the ZIP (both the ZipArchive and PclZip builders).

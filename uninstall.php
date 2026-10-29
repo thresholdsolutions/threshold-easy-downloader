@@ -1,13 +1,14 @@
 <?php
 /**
- * Uninstall cleanup for Threshold Easy Plugin and Theme Downloader.
+ * Uninstall cleanup for Threshold Easy Downloader.
  *
  * Runs when the plugin is DELETED from the Plugins screen. The plugin stores no
  * settings, so everything it ever wrote is removed here:
- *   - the cached update manifest and the directory-size cache (site transients)
- *   - the one-time auto-update backfill flag
- *   - its own entry in WordPress's auto_update_plugins list (core does not
- *     remove deleted plugins from that list)
+ *   - the directory-size cache (transient)
+ *   - leftovers from the self-hosted updater used before 1.2.0: the cached
+ *     update manifest, the auto-update backfill flag, and the plugin's own
+ *     entry in WordPress's auto_update_plugins list (core does not remove
+ *     deleted plugins from that list)
  *
  * @package ThresholdEasyDownloader
  */

@@ -1,6 +1,6 @@
 <?php
 /**
- * Branded Tools page for Threshold Easy Plugin and Theme Downloader.
+ * Branded Tools page for Threshold Easy Downloader.
  *
  * Lists every installed plugin and theme with a one-click "Download ZIP"
  * button. Styling mirrors the Threshold Login Guard admin UI (ink/gold
@@ -32,7 +32,7 @@ class TED_Admin {
 
     public static function register_page() {
         add_management_page(
-            __( 'Threshold Easy Plugin and Theme Downloader', 'threshold-easy-downloader' ),
+            __( 'Threshold Easy Downloader', 'threshold-easy-downloader' ),
             __( 'Easy Downloader', 'threshold-easy-downloader' ),
             'install_plugins',
             TED_SLUG,
@@ -57,7 +57,6 @@ class TED_Admin {
         $active_plugins = (array) get_option( 'active_plugins', array() );
         $themes         = wp_get_themes();
         $current_theme  = get_stylesheet();
-        $nonce          = wp_create_nonce( 'ted_ajax' );
         ?>
         <div class="wrap ted-wrap">
             <style>
@@ -97,9 +96,6 @@ class TED_Admin {
                 .ted-wrap .ted-dl:hover,.ted-wrap .ted-dl:focus{background:var(--gold-dk);color:var(--ink);}
                 .ted-wrap .ted-dl:focus{box-shadow:0 0 0 2px #fff,0 0 0 4px var(--ink);outline:none;}
                 .ted-wrap .ted-dl:active{transform:translateY(1px);}
-                .ted-wrap .ted-update-card{background:#fff;border:1px solid var(--ink);border-left:6px solid var(--gold);border-radius:8px;padding:16px 22px;margin-top:30px;max-width:920px;}
-                .ted-wrap .ted-update-card h3{margin:0 0 6px;font-size:19px;color:var(--ink);}
-                .ted-wrap .ted-update-card p{margin:0 0 12px;color:var(--ink);font-size:16px;}
                 .ted-wrap .button:not(.button-primary){background:#fff;border:2px solid var(--ink);color:var(--ink);border-radius:90px;font-weight:600;padding:2px 20px;height:auto;line-height:2;transition:background .12s;}
                 .ted-wrap .button:not(.button-primary):hover,.ted-wrap .button:not(.button-primary):focus{background:var(--gold);color:var(--ink);border-color:var(--ink);}
                 .ted-wrap .ted-result{margin-top:12px;padding:12px 14px;border-radius:4px;border:1px solid var(--ink);background:#fff;font-size:16px;line-height:1.7;display:none;color:var(--ink);}
@@ -225,15 +221,8 @@ class TED_Admin {
                 </tbody>
             </table>
 
-            <div class="ted-update-card">
-                <h3><?php esc_html_e( 'Plugin updates', 'threshold-easy-downloader' ); ?></h3>
-                <p><?php esc_html_e( 'This plugin updates itself from the Threshold update server and is enrolled in WordPress auto-updates. If a new release is available, you can also install it from the Plugins screen.', 'threshold-easy-downloader' ); ?></p>
-                <button type="button" id="ted_btn_update" class="button"><?php esc_html_e( 'Check for updates now', 'threshold-easy-downloader' ); ?></button>
-                <div id="ted_update_result" class="ted-result" role="status" aria-live="polite"></div>
-            </div>
-
             <div class="ted-footer">
-                <span><strong><?php esc_html_e( 'Threshold Easy Plugin and Theme Downloader', 'threshold-easy-downloader' ); ?></strong> &middot; <?php esc_html_e( 'by Spencer Taylor, Threshold Solutions, LLC', 'threshold-easy-downloader' ); ?></span>
+                <span><strong><?php esc_html_e( 'Threshold Easy Downloader', 'threshold-easy-downloader' ); ?></strong> &middot; <?php esc_html_e( 'by Spencer Taylor, Threshold Solutions, LLC', 'threshold-easy-downloader' ); ?></span>
                 <span class="sep" aria-hidden="true">|</span>
                 <a href="<?php echo esc_url( TED_GUIDE_URL ); ?>" target="_blank" rel="noopener"><?php esc_html_e( 'User guide', 'threshold-easy-downloader' ); ?> <span class="screen-reader-text"><?php esc_html_e( '(opens in a new tab)', 'threshold-easy-downloader' ); ?></span></a>
                 <span class="sep" aria-hidden="true">|</span>
@@ -262,27 +251,6 @@ class TED_Admin {
                     if (hit) visible++;
                 });
                 updateCount(visible);
-            });
-
-            // Check for updates.
-            $('#ted_btn_update').on('click', function(){
-                var $btn    = $(this);
-                var $result = $('#ted_update_result');
-
-                $btn.prop('disabled', true).text('<?php echo esc_js( __( 'Checking…', 'threshold-easy-downloader' ) ); ?>');
-                $result.hide().removeClass('is-success is-error');
-
-                $.post(ajaxurl, {
-                    action: 'ted_check_update',
-                    nonce:  '<?php echo esc_js( $nonce ); ?>'
-                }, function(res){
-                    $result.show().addClass( res.success ? 'is-success' : 'is-error' ).text( res.data );
-                }).fail(function(xhr){
-                    var msg = (xhr && xhr.responseJSON && xhr.responseJSON.data) ? xhr.responseJSON.data : '<?php echo esc_js( __( 'The request failed. Reload the page and try again.', 'threshold-easy-downloader' ) ); ?>';
-                    $result.show().addClass('is-error').text( msg );
-                }).always(function(){
-                    $btn.prop('disabled', false).text('<?php echo esc_js( __( 'Check for updates now', 'threshold-easy-downloader' ) ); ?>');
-                });
             });
         }(jQuery));
         </script>

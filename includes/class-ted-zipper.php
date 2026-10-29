@@ -1,6 +1,6 @@
 <?php
 /**
- * ZIP builder + download streamer for Threshold Easy Plugin and Theme Downloader.
+ * ZIP builder + download streamer for Threshold Easy Downloader.
  *
  * Validates the requested item against the actual installed plugin/theme lists
  * (no path input from the user is ever used directly), builds a ZIP in the WP
