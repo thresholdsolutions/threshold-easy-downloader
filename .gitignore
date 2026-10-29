@@ -1,0 +1,15 @@
+# OS and editor
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# Build output and release zips
+/build/
+/dist/
+*.zip
+
+# Dependencies (none bundled today)
+/vendor/
+/node_modules/
