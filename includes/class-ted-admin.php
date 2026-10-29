@@ -27,7 +27,7 @@ class TED_Admin {
         if ( 'tools_page_' . TED_SLUG !== $hook ) {
             return;
         }
-        wp_enqueue_style( 'ted-ubuntu-sans', 'https://fonts.googleapis.com/css2?family=Ubuntu+Sans:wght@400;500;600;700&display=swap', array(), null ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
+        wp_enqueue_style( 'ted-ubuntu-sans', plugins_url( 'assets/fonts/ubuntu-sans.css', TED_PLUGIN_FILE ), array(), TED_VERSION );
     }
 
     public static function register_page() {

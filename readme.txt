@@ -31,6 +31,7 @@ Built by Spencer Taylor, Threshold Solutions, LLC.
 = 1.2.0 =
 * Changed: updates now come from the WordPress.org plugin directory. The self-hosted updater, the auto-update enrolment, and the "Check for updates now" button are removed.
 * Changed: plugin renamed to Threshold Easy Downloader.
+* Changed: the Ubuntu Sans font is bundled (Ubuntu Font Licence 1.0) instead of loaded from Google Fonts, so the Tools page makes no outside requests.
 
 = 1.1.0 =
 * Security: symbolic links inside a plugin or theme folder are no longer followed into the ZIP (both the ZipArchive and PclZip builders).
