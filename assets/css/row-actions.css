@@ -1,0 +1,3 @@
+/* Threshold Easy Downloader: "Download ZIP" link on the Plugins and Themes screens. */
+.row-actions .ted_download a.ted-row-action{color:#222222;font-weight:600;text-decoration:underline;}
+.row-actions .ted_download a.ted-row-action:hover,.row-actions .ted_download a.ted-row-action:focus{color:#222222;background:#ffc966;}

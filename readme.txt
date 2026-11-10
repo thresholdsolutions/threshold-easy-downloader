@@ -4,7 +4,7 @@ Tags: download, zip, backup, export, developer
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.2.0
+Stable tag: 1.2.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -27,6 +27,10 @@ User guide: https://spencer-taylor.com/threshold-easy-downloader/#guide
 Built by Spencer Taylor, Threshold Solutions, LLC.
 
 == Changelog ==
+
+= 1.2.1 =
+* Changed: admin styles and the Tools page filter script are now separate files loaded with wp_enqueue_style() and wp_enqueue_script(), only on the screens that use them.
+* Changed: the filter count ("3 / 40 shown") is translatable.
 
 = 1.2.0 =
 * Changed: updates now come from the WordPress.org plugin directory. The self-hosted updater, the auto-update enrolment, and the "Check for updates now" button are removed.

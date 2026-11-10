@@ -3,7 +3,7 @@
  * Plugin Name: Threshold Easy Downloader
  * Plugin URI:  https://spencer-taylor.com/threshold-easy-downloader/
  * Description: Download any installed plugin or theme as a ZIP file, from the Plugins list or the Tools page. Built by Threshold Solutions, LLC.
- * Version:     1.2.0
+ * Version:     1.2.1
  * Author:      Threshold Solutions, LLC
  * Author URI:  https://spencer-taylor.com
  * License:     GPL-2.0-or-later
@@ -14,7 +14,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'TED_VERSION',     '1.2.0' );
+define( 'TED_VERSION',     '1.2.1' );
 define( 'TED_SLUG',        'threshold-easy-downloader' );
 define( 'TED_PLUGIN_FILE', __FILE__ );
 define( 'TED_GUIDE_URL',   'https://spencer-taylor.com/threshold-easy-downloader/#guide' );
@@ -72,11 +72,12 @@ function ted_theme_row_action( $actions, $theme ) {
     return $actions;
 }
 
-// Row-action styling (brand charcoal, underlined like every other Threshold link).
-add_action( 'admin_head-plugins.php', 'ted_row_action_css' );
-add_action( 'admin_head-themes.php', 'ted_row_action_css' );
-add_action( 'admin_head-plugins-network.php', 'ted_row_action_css' );
-add_action( 'admin_head-themes-network.php', 'ted_row_action_css' );
-function ted_row_action_css() {
-    echo '<style>.row-actions .ted_download a.ted-row-action{color:#222222;font-weight:600;text-decoration:underline;}.row-actions .ted_download a.ted-row-action:hover,.row-actions .ted_download a.ted-row-action:focus{color:#222222;background:#ffc966;}</style>';
+// Row-action styling (brand charcoal, underlined like every other Threshold link),
+// loaded only on the Plugins and Themes screens.
+add_action( 'admin_enqueue_scripts', 'ted_row_action_css' );
+function ted_row_action_css( $hook ) {
+    if ( ! in_array( $hook, array( 'plugins.php', 'themes.php' ), true ) ) {
+        return;
+    }
+    wp_enqueue_style( 'ted-row-actions', plugins_url( 'assets/css/row-actions.css', TED_PLUGIN_FILE ), array(), TED_VERSION );
 }
