@@ -26,11 +26,18 @@ User guide: https://spencer-taylor.com/threshold-easy-downloader/#guide
 
 Built by Spencer Taylor, Threshold Solutions, LLC.
 
+== Credits ==
+
+Bundles the Ubuntu Sans font (Copyright Canonical Ltd.), licensed under the Ubuntu Font Licence 1.0; see assets/fonts/LICENCE.txt.
+
 == Changelog ==
 
 = 1.2.1 =
 * Changed: admin styles and the Tools page filter script are now separate files loaded with wp_enqueue_style() and wp_enqueue_script(), only on the screens that use them.
 * Changed: the filter count ("3 / 40 shown") is translatable.
+* Changed: all functions, classes, constants, hooks, and asset handles now use the unique threshold_ed / Threshold_ED prefix.
+* Changed: the themes table on the Tools page is shown only to users who can install themes.
+* Changed: download filenames are sanitized; uninstall cleans every site on multisite.
 
 = 1.2.0 =
 * Changed: updates now come from the WordPress.org plugin directory. The self-hosted updater, the auto-update enrolment, and the "Check for updates now" button are removed.

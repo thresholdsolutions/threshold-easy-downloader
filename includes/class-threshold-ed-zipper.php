@@ -11,9 +11,9 @@
 
 defined( 'ABSPATH' ) || exit;
 
-class TED_Zipper {
+class Threshold_ED_Zipper {
 
-    const SIZE_CACHE_KEY = 'ted_dir_sizes';
+    const SIZE_CACHE_KEY = 'threshold_ed_dir_sizes';
 
     /**
      * Build the nonce-protected admin-post download URL for an item.
@@ -25,18 +25,18 @@ class TED_Zipper {
         return wp_nonce_url(
             add_query_arg(
                 array(
-                    'action' => 'ted_download',
+                    'action' => 'threshold_ed_download',
                     'type'   => $type,
                     'item'   => rawurlencode( $item ),
                 ),
                 admin_url( 'admin-post.php' )
             ),
-            'ted_download_' . $type . '_' . $item
+            'threshold_ed_download_' . $type . '_' . $item
         );
     }
 
     /**
-     * admin_post_ted_download handler.
+     * admin_post_threshold_ed_download handler.
      */
     public static function handle_download() {
         $type = isset( $_GET['type'] ) ? sanitize_key( $_GET['type'] ) : '';
@@ -52,7 +52,7 @@ class TED_Zipper {
             wp_die( esc_html__( 'You are not allowed to download this.', 'threshold-easy-downloader' ), '', array( 'response' => 403 ) );
         }
 
-        check_admin_referer( 'ted_download_' . $type . '_' . $item );
+        check_admin_referer( 'threshold_ed_download_' . $type . '_' . $item );
 
         if ( 'plugin' === $type ) {
             self::download_plugin( $item );
@@ -123,6 +123,7 @@ class TED_Zipper {
      * "slug-1.2.3.zip", with the version cleaned for filesystem use.
      */
     private static function zip_filename( $slug, $version ) {
+        $slug    = sanitize_file_name( $slug );
         $version = preg_replace( '/[^0-9A-Za-z._-]/', '', (string) $version );
         return $slug . ( '' !== $version ? '-' . $version : '' ) . '.zip';
     }
@@ -147,7 +148,7 @@ class TED_Zipper {
         // Big themes can take a while to pack; never leave a temp ZIP behind,
         // whether the request times out, fatals, or the user cancels mid-stream.
         if ( function_exists( 'set_time_limit' ) ) {
-            @set_time_limit( 0 ); // phpcs:ignore WordPress.PHP.NoSilencedErrors
+            set_time_limit( 300 ); // phpcs:ignore Squiz.PHP.DiscouragedFunctions.Discouraged -- packing a large theme can exceed the default 30 s; 300 s matches core's upgrader.
         }
         ignore_user_abort( true );
         register_shutdown_function(
@@ -173,7 +174,9 @@ class TED_Zipper {
         while ( ob_get_level() > 0 ) {
             ob_end_clean();
         }
-        @ini_set( 'zlib.output_compression', 'Off' ); // phpcs:ignore WordPress.PHP.NoSilencedErrors
+        if ( ini_get( 'zlib.output_compression' ) ) {
+            ini_set( 'zlib.output_compression', 'Off' ); // phpcs:ignore WordPress.PHP.IniSet.Risky, Squiz.PHP.DiscouragedFunctions.Discouraged -- binary ZIP download; compression would break Content-Length and corrupt the file.
+        }
 
         nocache_headers();
         header( 'Content-Type: application/zip' );
@@ -186,13 +189,13 @@ class TED_Zipper {
         // read a file in pieces, and get_contents() would load a ZIP that can
         // run to tens of megabytes into memory just to echo it. The file is a
         // temp ZIP this plugin created a moment ago, never user-supplied.
-        $fh = fopen( $tmp, 'rb' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
+        $fh = fopen( $tmp, 'rb' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen -- chunked read of a temp ZIP this plugin created; WP_Filesystem has no chunked read.
         if ( $fh ) {
             while ( ! feof( $fh ) ) {
-                echo fread( $fh, 1048576 ); // phpcs:ignore WordPress.Security.EscapeOutput, WordPress.WP.AlternativeFunctions.file_system_operations_fread
+                echo fread( $fh, 1048576 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, WordPress.WP.AlternativeFunctions.file_system_operations_fread -- raw binary ZIP stream of a temp file this plugin just created; escaping would corrupt it.
                 flush();
             }
-            fclose( $fh ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
+            fclose( $fh ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- closes the handle opened above.
         }
         wp_delete_file( $tmp );
         exit;
@@ -311,7 +314,7 @@ class TED_Zipper {
         // update, or delete of anything directly inside it).
         $cache = get_transient( self::SIZE_CACHE_KEY );
         $cache = is_array( $cache ) ? $cache : array();
-        $key   = $source . '|' . (int) @filemtime( $source ); // phpcs:ignore WordPress.PHP.NoSilencedErrors
+        $key   = $source . '|' . (int) filemtime( $source );
         if ( isset( $cache[ $key ] ) ) {
             return size_format( (float) $cache[ $key ] );
         }
@@ -319,7 +322,7 @@ class TED_Zipper {
         $bytes = 0;
         foreach ( self::list_entries( $source ) as $path => $is_dir ) {
             if ( ! $is_dir ) {
-                $bytes += (int) @filesize( $path ); // phpcs:ignore WordPress.PHP.NoSilencedErrors
+                $bytes += (int) filesize( $path );
             }
         }
 

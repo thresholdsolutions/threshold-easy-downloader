@@ -14,24 +14,24 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'TED_VERSION',     '1.2.1' );
-define( 'TED_SLUG',        'threshold-easy-downloader' );
-define( 'TED_PLUGIN_FILE', __FILE__ );
-define( 'TED_GUIDE_URL',   'https://spencer-taylor.com/threshold-easy-downloader/#guide' );
+define( 'THRESHOLD_ED_VERSION',     '1.2.1' );
+define( 'THRESHOLD_ED_SLUG',        'threshold-easy-downloader' );
+define( 'THRESHOLD_ED_PLUGIN_FILE', __FILE__ );
+define( 'THRESHOLD_ED_GUIDE_URL',   'https://spencer-taylor.com/threshold-easy-downloader/#guide' );
 
-require_once __DIR__ . '/includes/class-ted-zipper.php';
-require_once __DIR__ . '/includes/class-ted-admin.php';
+require_once __DIR__ . '/includes/class-threshold-ed-zipper.php';
+require_once __DIR__ . '/includes/class-threshold-ed-admin.php';
 
-TED_Admin::init();
+Threshold_ED_Admin::init();
 
-// ─── Download handler (admin-post.php?action=ted_download) ──────────────────
+// ─── Download handler (admin-post.php?action=threshold_ed_download) ──────────────────
 
-add_action( 'admin_post_ted_download', array( 'TED_Zipper', 'handle_download' ) );
+add_action( 'admin_post_threshold_ed_download', array( 'Threshold_ED_Zipper', 'handle_download' ) );
 
 // ─── "Download ZIP" row action on the Plugins list ───────────────────────────
 
-add_filter( 'plugin_action_links', 'ted_plugin_row_action', 10, 4 );
-add_filter( 'network_admin_plugin_action_links', 'ted_plugin_row_action', 10, 4 );
+add_filter( 'plugin_action_links', 'threshold_ed_plugin_row_action', 10, 4 );
+add_filter( 'network_admin_plugin_action_links', 'threshold_ed_plugin_row_action', 10, 4 );
 
 /**
  * @param string[] $actions
@@ -39,7 +39,7 @@ add_filter( 'network_admin_plugin_action_links', 'ted_plugin_row_action', 10, 4 
  * @param array    $plugin_data
  * @param string   $context  'all', 'active', ... or 'mustuse' / 'dropins'.
  */
-function ted_plugin_row_action( $actions, $plugin_file, $plugin_data = array(), $context = '' ) {
+function threshold_ed_plugin_row_action( $actions, $plugin_file, $plugin_data = array(), $context = '' ) {
     // Must-use plugins and drop-ins are not in get_plugins(), so the download
     // would fail validation; do not offer it there.
     if ( in_array( $context, array( 'mustuse', 'dropins' ), true ) ) {
@@ -48,9 +48,9 @@ function ted_plugin_row_action( $actions, $plugin_file, $plugin_data = array(), 
     if ( ! current_user_can( 'install_plugins' ) ) {
         return $actions;
     }
-    $actions['ted_download'] = sprintf(
-        '<a href="%s" class="ted-row-action">%s</a>',
-        esc_url( TED_Zipper::download_url( 'plugin', $plugin_file ) ),
+    $actions['threshold_ed_download'] = sprintf(
+        '<a href="%s" class="threshold-ed-row-action">%s</a>',
+        esc_url( Threshold_ED_Zipper::download_url( 'plugin', $plugin_file ) ),
         esc_html__( 'Download ZIP', 'threshold-easy-downloader' )
     );
     return $actions;
@@ -58,15 +58,15 @@ function ted_plugin_row_action( $actions, $plugin_file, $plugin_data = array(), 
 
 // ─── "Download ZIP" row action on the network Themes list (multisite) ───────
 
-add_filter( 'theme_action_links', 'ted_theme_row_action', 10, 2 );
+add_filter( 'theme_action_links', 'threshold_ed_theme_row_action', 10, 2 );
 
-function ted_theme_row_action( $actions, $theme ) {
+function threshold_ed_theme_row_action( $actions, $theme ) {
     if ( ! current_user_can( 'install_themes' ) || ! ( $theme instanceof WP_Theme ) ) {
         return $actions;
     }
-    $actions['ted_download'] = sprintf(
-        '<a href="%s" class="ted-row-action">%s</a>',
-        esc_url( TED_Zipper::download_url( 'theme', $theme->get_stylesheet() ) ),
+    $actions['threshold_ed_download'] = sprintf(
+        '<a href="%s" class="threshold-ed-row-action">%s</a>',
+        esc_url( Threshold_ED_Zipper::download_url( 'theme', $theme->get_stylesheet() ) ),
         esc_html__( 'Download ZIP', 'threshold-easy-downloader' )
     );
     return $actions;
@@ -74,10 +74,10 @@ function ted_theme_row_action( $actions, $theme ) {
 
 // Row-action styling (brand charcoal, underlined like every other Threshold link),
 // loaded only on the Plugins and Themes screens.
-add_action( 'admin_enqueue_scripts', 'ted_row_action_css' );
-function ted_row_action_css( $hook ) {
+add_action( 'admin_enqueue_scripts', 'threshold_ed_row_action_css' );
+function threshold_ed_row_action_css( $hook ) {
     if ( ! in_array( $hook, array( 'plugins.php', 'themes.php' ), true ) ) {
         return;
     }
-    wp_enqueue_style( 'ted-row-actions', plugins_url( 'assets/css/row-actions.css', TED_PLUGIN_FILE ), array(), TED_VERSION );
+    wp_enqueue_style( 'threshold-ed-row-actions', plugins_url( 'assets/css/row-actions.css', THRESHOLD_ED_PLUGIN_FILE ), array(), THRESHOLD_ED_VERSION );
 }
