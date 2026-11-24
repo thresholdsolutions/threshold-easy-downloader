@@ -1,0 +1,23 @@
+name: Deploy to WordPress.org
+
+# Runs only when a version tag (for example 1.2.1) is pushed.
+# Commits to main never publish anything.
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  deploy:
+    name: Deploy tag to the plugin directory
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the tagged code
+        uses: actions/checkout@v4
+
+      - name: Deploy to WordPress.org SVN
+        uses: 10up/action-wordpress-plugin-deploy@stable
+        env:
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+          SLUG: threshold-easy-downloader
