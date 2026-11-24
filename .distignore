@@ -3,3 +3,4 @@
 .distignore
 .github
 .wordpress-org
+.gitattributes
