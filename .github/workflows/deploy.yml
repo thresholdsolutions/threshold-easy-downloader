@@ -18,6 +18,6 @@ jobs:
       - name: Deploy to WordPress.org SVN
         uses: 10up/action-wordpress-plugin-deploy@stable
         env:
-          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SVN_USERNAME: pugboy
           SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
           SLUG: threshold-easy-downloader
