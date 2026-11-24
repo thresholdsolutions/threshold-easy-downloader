@@ -22,6 +22,8 @@ Threshold Easy Downloader adds one-click "Download ZIP" links for every installe
 * Uses ZipArchive with automatic PclZip fallback.
 * No settings, no outside services, and nothing sent anywhere: everything happens on your own server.
 
+No ads, no upsells, and no admin notices. Install it, and it does exactly what it says.
+
 User guide: https://spencer-taylor.com/threshold-easy-downloader/#guide
 
 Built by Spencer Taylor, Threshold Solutions, LLC.
